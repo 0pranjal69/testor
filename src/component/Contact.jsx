@@ -11,7 +11,7 @@ function Contact() {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      const res = await axios.post('http://localhost:5000/send', data);
+      const res = await axios.post('/api/send', data);
       if (res.data.success) {
         toast.success("Email sent successfully!");
         e.target.reset(); // Clear form after success

@@ -1,14 +1,15 @@
-import nodemailer from 'nodemailer';
+// /api/send.js
+import nodemailer from "nodemailer";
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method Not Allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
 
   const { name, email, contact, message } = req.body;
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: "gmail",
     auth: {
       user: process.env.MAIL_USER,
       pass: process.env.MAIL_PASS,
@@ -20,18 +21,18 @@ export default async function handler(req, res) {
     to: process.env.MAIL_RECEIVER,
     subject: `New message from ${name}`,
     html: `
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Contact:</strong> ${contact}</p>
-      <p><strong>Message:</strong> ${message}</p>
+      <p><b>Name:</b> ${name}</p>
+      <p><b>Email:</b> ${email}</p>
+      <p><b>Contact:</b> ${contact}</p>
+      <p><b>Message:</b> ${message}</p>
     `,
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    return res.status(200).json({ success: true, message: "Email sent successfully" });
+    return res.status(200).json({ success: true });
   } catch (error) {
-    console.error("Email send error:", error);
-    return res.status(500).json({ success: false, message: "Email failed to send" });
+    console.error("Email error:", error);
+    return res.status(500).json({ success: false });
   }
 }
